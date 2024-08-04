@@ -2,11 +2,9 @@ from confluent_kafka import Consumer
 import pickle
 from kafkaLogic.produce import produce
 
-def consumeTrainAndProduce(config):
-  config["group.id"] = "Aksel's consumer v1" # uuid.uuid4().hex
+def consumeTrainAndProduce(config, consumerGroup, consumer_topic, producer_topic):
+  config["group.id"] = consumerGroup
   config["auto.offset.reset"] = "latest"
-
-  consumer_topic = "aggregated_weights_v1"
   consumer = Consumer(config)
   consumer.subscribe([consumer_topic])
 
@@ -18,7 +16,6 @@ def consumeTrainAndProduce(config):
         key = msg.key().decode("utf-8")
         value = msg.value()
         print(f"Consumed {len(msg)} bytes with key: {key}")
-        producer_topic = "client_weights_v1"
         produce(producer_topic, config, pickle.loads(value))
         consumer.commit()
       else:
