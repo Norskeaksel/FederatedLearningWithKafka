@@ -9,6 +9,7 @@
 1. docker compose up -d
 2a. python main.py <<< "local" with bash
 2b. python main.py and manually enter "local" with powershell
+3. python produce_initial_weights.py
 
 ## Running with confluent kafka cluster 
 1. Accuire the main.properties file from Aksel

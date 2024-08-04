@@ -21,6 +21,8 @@ def consumeTrainAndProduce(config):
         producer_topic = "client_weights_v1"
         produce(producer_topic, config, pickle.loads(value))
         consumer.commit()
+      else:
+        print(f"Consumed: {msg}")
   except KeyboardInterrupt:
     pass
   finally:
