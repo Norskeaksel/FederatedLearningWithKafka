@@ -8,8 +8,12 @@ services:
           connections:
             docker-kafka-server:
               properties:
-                bootstrap.servers: "kafka:9092"
-                
+                bootstrap.servers: "broker-1:9092"
+    ports:
+    - 8080:8080
+    networks:
+      - kafka
+      
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.0
     container_name: zookeeper

@@ -31,10 +31,7 @@ def consume(topic, config):
   config["group.id"] = "python-group-1"
   config["auto.offset.reset"] = "earliest"
 
-  # creates a new consumer instance
   consumer = Consumer(config)
-
-  # subscribes to the specified topic
   consumer.subscribe([topic])
 
   try:
@@ -48,7 +45,6 @@ def consume(topic, config):
   except KeyboardInterrupt:
     pass
   finally:
-    # closes the consumer connection
     consumer.close()
 
 def main():
