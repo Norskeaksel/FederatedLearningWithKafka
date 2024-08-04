@@ -7,10 +7,10 @@
 
 ## Running with local kafka cluster
 1. docker compose up -d
-2a. python client.py <<< "local" with bash
-2b. python client.py and manually enter "local" with powershell
+2a. python main.py <<< "local" with bash
+2b. python main.py and manually enter "local" with powershell
 
 ## Running with confluent kafka cluster 
-1. Accuire the client.properties file from Aksel
-2a. python client.py <<< "cloud" with bash
-2b. python client.py and manually enter "cloud" with powershell
+1. Accuire the main.properties file from Aksel
+2a. python main.py <<< "cloud" with bash
+2b. python main.py and manually enter "cloud" with powershell
