@@ -1,4 +1,4 @@
-# Federated lerning with kafka
+# Federated Learning with Kafka
 
 ## Setup
 1. Make a virtual environment with: python -m venv env  
