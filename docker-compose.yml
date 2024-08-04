@@ -8,7 +8,7 @@ services:
           connections:
             docker-kafka-server:
               properties:
-                bootstrap.servers: "broker-1:9092"
+                bootstrap.servers: "broker-2:9092"
     ports:
     - 8080:8080
     networks:
@@ -69,6 +69,10 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_LOG_DIRS: /kafka
+      # Increase the maximum message size
+      KAFKA_MESSAGE_MAX_BYTES: 20000000 # 20 MB
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 20000000 # 20 MB
+      KAFKA_MAX_REQUEST_SIZE: 20000000 # 20 MB
     volumes:
       - ./mnt/broker2:/kafka
     networks:

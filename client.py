@@ -1,5 +1,7 @@
-from confluent_kafka import Producer, Consumer
-# from keras.datasets import mnist
+from confluent_kafka import Producer, Consumer, TopicPartition
+# import uuid
+import pickle
+import model
 
 def read_config():
   env = input("Running client of type: ")
@@ -8,7 +10,7 @@ def read_config():
     env = input("Please spesify if client is of type 'local' or 'cloud': ")
 
   config = {}
-  with open(env+"_client.properties") as fh:
+  with open("config/"+env+"_client.properties") as fh:
     for line in fh:
       line = line.strip()
       if len(line) != 0 and line[0] != "#":
@@ -16,22 +18,24 @@ def read_config():
         config[parameter] = value.strip()
   return config
 
-def produce(topic, config):
+
+def produce(topic, config, received_weights):
   producer = Producer(config)
-
-  # produces a sample message
   key = "key"
-  value = "value"
-  producer.produce(topic, key=key, value=value)
-  print(f"Produced message to topic {topic}: key = {key:12} value = {value:12}")
-
+  new_weights = model.trainModel(received_weights)
+  serialized_weights = pickle.dumps(new_weights)
+  print(f"Produceing {len(serialized_weights)} bytes to topic {topic}: key = {key:12}")
+  producer.produce(topic, key=key, value=serialized_weights)
   # send any outstanding or buffered messages to the Kafka broker
   producer.flush()
+  print(f"{len(serialized_weights)} bytes produced")
 
-def consume(topic, config):
+
+def consumeTrainAndProduce(topic, config):
   # sets the consumer group ID and offset  
-  config["group.id"] = "python-group-1"
+  config["group.id"] = "Aksel's consumer" # uuid.uuid4().hex
   config["auto.offset.reset"] = "earliest"
+  # produce(topic, config, "") # Only needed once. Comment out after produceing weights to the cluster for the first time
 
   consumer = Consumer(config)
   consumer.subscribe([topic])
@@ -39,12 +43,13 @@ def consume(topic, config):
   try:
     while True:
       # consumer polls the topic and prints any incoming messages
-      msg = consumer.poll(1.0)
+      msg = consumer.poll(10)
       if msg is not None and msg.error() is None:
         key = msg.key().decode("utf-8")
-        value = msg.value().decode("utf-8")
-        print(f"Consumed message from topic {topic}: key = {key:12} value = {value:12}")
-        break
+        value = msg.value()
+        print(f"Consumed {len(msg)} bytes with key: {key}")
+        produce(topic, config, pickle.loads(value))
+        consumer.commit()
   except KeyboardInterrupt:
     pass
   finally:
@@ -52,10 +57,8 @@ def consume(topic, config):
 
 def main():
   config = read_config()
-  topic = "recommendation_weights"
-
-  produce(topic, config)
-  consume(topic, config)
+  topic = "recommendation_weights_v1"
+  consumeTrainAndProduce(topic, config)
 
 
 main()
