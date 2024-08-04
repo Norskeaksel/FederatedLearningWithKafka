@@ -2,11 +2,13 @@ from confluent_kafka import Producer, Consumer
 # from keras.datasets import mnist
 
 def read_config():
-  '''reads the client configuration from client.properties
-  and returns it as a key-value map'''
+  env = input("Running client of type: ")
+  print(env)
+  while env not in {"local", "cloud"}:
+    env = input("Please spesify if client is of type 'local' or 'cloud': ")
 
   config = {}
-  with open("client.properties") as fh:
+  with open(env+"_client.properties") as fh:
     for line in fh:
       line = line.strip()
       if len(line) != 0 and line[0] != "#":
@@ -42,6 +44,7 @@ def consume(topic, config):
         key = msg.key().decode("utf-8")
         value = msg.value().decode("utf-8")
         print(f"Consumed message from topic {topic}: key = {key:12} value = {value:12}")
+        break
   except KeyboardInterrupt:
     pass
   finally:
