@@ -16,7 +16,7 @@
 4. python produce_initial_weights.py  
 
 ## Running with confluent kafka cluster 
-1. Accuire the client.properties file from Aksel  
+1. Accuire the cloud_client.properties file from Aksel  
 2a. python client.py <<< "cloud" with bash  
 2b. python client.py and manually enter "cloud" with powershell  
 3. python controller.py <<< "cloud"
