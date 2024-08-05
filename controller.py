@@ -4,7 +4,7 @@ from kafkaLogic.read_config import read_config
 
 
 config = read_config()
-consumerGroup = uuid.uuid4().hex # TODO make this consume
+consumerGroup = "Aksel's controller v1"
 consumer_topic = "client_weights_v1"
 producer_topic = "aggregated_weights_v1"
 
