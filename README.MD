@@ -1,7 +1,7 @@
 # Federated Learning with Kafka
 
 ## Setup
-0. git clone https://github.com/Norskeaksel/FederatedLearningWithKafka.git
+0. git clone https://github.com/Norskeaksel/FederatedLearningWithKafka.git; cd FederatedLearningWithKafka
 1. Make a virtual environment with: python -m venv env  
 2. Activate with: source env/bin/activate on linux, env\Scripts\activate on windows  
 3. pip3 install confluent-kafka
@@ -9,6 +9,7 @@
 5. Give the consumerGroup variable in client.py a new name. It must be unique for each device.
 
 ## Running with local kafka cluster
+0. Install and run docker desktop
 1. docker compose up -d  
 2a. python client.py <<< "local" with bash  
 2b. python client.py and manually enter "local" with powershell  
