@@ -1,6 +1,7 @@
 # Federated Learning with Kafka
 
 ## Setup
+0. git clone https://github.com/Norskeaksel/FederatedLearningWithKafka.git
 1. Make a virtual environment with: python -m venv env  
 2. Activate with: source env/bin/activate on linux, env\Scripts\activate on windows  
 3. pip3 install confluent-kafka
