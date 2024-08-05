@@ -4,7 +4,7 @@
 1. Make a virtual environment with: python -m venv env  
 2. Activate with: source env/bin/activate on linux, env\Scripts\activate on windows  
 3. pip3 install confluent-kafka  
-4. Give the consumerGroup variables in clinent.py and controller.py new names. They must be unique for each device.
+4. Give the consumerGroup variable in clinent.py a new name. It must be unique for each device.
 
 ## Running with local kafka cluster
 1. docker compose up -d  
