@@ -5,8 +5,7 @@
 2. Activate with: source env/bin/activate on linux, env\Scripts\activate on windows  
 3. pip3 install confluent-kafka
 4. pip3 install tensorflow
-5. pip3 install keras
-6. Give the consumerGroup variable in client.py a new name. It must be unique for each device.
+5. Give the consumerGroup variable in client.py a new name. It must be unique for each device.
 
 ## Running with local kafka cluster
 1. docker compose up -d  
