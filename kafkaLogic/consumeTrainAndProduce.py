@@ -1,26 +1,13 @@
-from confluent_kafka import Consumer
 import pickle
+
+from kafkaLogic.consume import consume
 from kafkaLogic.produce import produce
+import model
 
 def consumeTrainAndProduce(config, consumerGroup, consumer_topic, producer_topic):
-  config["group.id"] = consumerGroup
-  config["auto.offset.reset"] = "latest"
-  consumer = Consumer(config)
-  consumer.subscribe([consumer_topic])
-
-  try:
     while True:
-      # consumer polls the topic and prints any incoming messages
-      msg = consumer.poll(10)
-      if msg is not None and msg.error() is None:
-        key = msg.key().decode("utf-8")
-        value = msg.value()
-        print(f"Consumed {len(msg)} bytes with key: {key}")
-        produce(producer_topic, config, pickle.loads(value))
-        consumer.commit()
-      else:
-        print(f"Consumed: {msg}")
-  except KeyboardInterrupt:
-    pass
-  finally:
-    consumer.close()
+      serialized_weights = consume(config, consumerGroup, consumer_topic)
+      weights = pickle.loads(serialized_weights)
+      new_weights = model.trainModel(weights)
+      new_serialized_weights = pickle.dumps(new_weights)
+      produce(producer_topic, config, new_serialized_weights)
