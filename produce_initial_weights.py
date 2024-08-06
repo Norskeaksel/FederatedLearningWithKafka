@@ -9,4 +9,4 @@ serialized_weights = pickle.dumps(weights)
 client_topic = "client_weights_v1"
 controler_topic = "aggregated_weights_v1"
 
-produce(client_topic, config, serialized_weights, nr_of_samples) 
+produce(controler_topic, config, serialized_weights, nr_of_samples) 
