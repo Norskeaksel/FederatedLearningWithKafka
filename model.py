@@ -25,13 +25,14 @@ def trainModel(weights):
     test_images = test_images.astype('float32') / 255
     train_labels = to_categorical(train_labels)
     test_labels = to_categorical(test_labels)
+    nr_of_samples = train_images.shape[0]
 
     network = create_network()
     if weights != "":
       network.set_weights(weights)
-      print("Using consumed weights")
+      print(f"Using consumed weights on {nr_of_samples} samples")
     else:
-       print("Training network from scratch")
+       print(f"Training network from scratch on {nr_of_samples} samples")
 
     fit_network(network, train_images, train_labels)
-    return network.weights
+    return network.weights, nr_of_samples
