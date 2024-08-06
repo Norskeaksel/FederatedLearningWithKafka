@@ -28,7 +28,7 @@ def trainModel(weights):
     nr_of_samples = train_images.shape[0]
 
     network = create_network()
-    if weights != "":
+    if weights is not None:
       network.set_weights(weights)
       print(f"Using consumed weights on {nr_of_samples} samples")
     else:
