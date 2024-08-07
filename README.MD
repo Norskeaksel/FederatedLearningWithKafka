@@ -16,7 +16,8 @@
 4. python produce_initial_weights.py  
 
 ## Running with confluent kafka cluster 
-1. Accuire the cloud_client.properties file from Aksel  
+1.  Rename the [cloud_client_dummy.properties](kafkaLogic/config/cloud_client_dummy.properties) 
+file to "cloud_client.properties" and get the sasl username and password from Aksel  
 2a. python client.py <<< "cloud" with bash  
 2b. python client.py and manually enter "cloud" with powershell  
 3. python controller.py <<< "cloud" Only have ONE controller active at the time!
