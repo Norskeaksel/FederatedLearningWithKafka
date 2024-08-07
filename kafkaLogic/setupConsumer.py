@@ -9,7 +9,7 @@ def setupConsumer(config, consumerGroup, consumer_topic):
   return consumer
 
 
-def seekToLatestOffset(consumer):
+def seekToNPreviousOffset(consumer, n):
   print("Identifying partitions")
   partitions = consumer.assignment()
   while partitions == []:
@@ -19,4 +19,4 @@ def seekToLatestOffset(consumer):
   print(f"found {partitions} partitions")
   for p in partitions:
     _, high = consumer.get_watermark_offsets(p)
-    consumer.seek(TopicPartition(p.topic, p.partition, high - 1))
+    consumer.seek(TopicPartition(p.topic, p.partition, high - n))
