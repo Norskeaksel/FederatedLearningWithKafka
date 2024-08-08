@@ -1,6 +1,5 @@
 def read_config():
-  env = input("Running client of type: ")
-  print(env)
+  env = input()
   while env not in {"local", "cloud"}:
     env = input("Please spesify if client is of type 'local' or 'cloud': ")
 
