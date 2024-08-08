@@ -1,6 +1,6 @@
 from confluent_kafka import Producer
 
-def produce(topic, config, serialized_weights, sample_nr):
+def produce(topic, config, serialized_weights, sample_nr=1):
   producer = Producer(config)
   key = "key"
   sample_nr_binary = str(sample_nr).encode('utf-8')

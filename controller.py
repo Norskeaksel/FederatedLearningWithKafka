@@ -25,6 +25,9 @@ def main():
 
     weights = []
     nr_of_samples=[]
+    round_nr = 1
+    with open('epoch_times.log', 'w') as log_file:
+        log_file.write('')
     try:
         while True:
             msg = consume(consumer)

@@ -1,6 +1,5 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-from flwr_datasets.partitioner
 from torch_geometric.loader import DataLoader
 import torch
 from torch_geometric.nn import GCNConv
@@ -33,7 +32,7 @@ class Net(torch.nn.Module):
         return edge_pred.squeeze()
 
 def load_data(split_ratio=0.2):
-    url = "C:/Users/ahsor/Documents/Kafka/recommender/data/ratings_Electronics (1).csv"
+    url = "C:/Users/ahsor/Documents/Kafka/FederatedLearningWithKafka/data/ratings_Electronics.csv"
     df = pd.read_csv(url)
     df.rename(columns={'AKM1MP6P0OYPR': 'userId', '0132793040': 'productId', '5.0': 'Rating', '1365811200': 'timestamp'}, inplace=True)
     df = df.head(5000)
@@ -48,23 +47,24 @@ def load_data(split_ratio=0.2):
     train_df, test_df = train_test_split(df, test_size=split_ratio, random_state=42)
     train_df, val_df = train_test_split(train_df, test_size=split_ratio, random_state=42)
 
-    edge_index = torch.tensor([train_df['userId'].values, train_df['productId'].values], dtype=torch.long)
-    edge_attr = torch.tensor(train_df['Rating'].values, dtype=torch.float)
+    # training edge matrix using only the training data
+    train_edge_index = torch.tensor([train_df['userId'].values, train_df['productId'].values], dtype=torch.long)
+    train_edge_attr = torch.tensor(train_df['Rating'].values, dtype=torch.float)
+    # val edge matrix using only the val data
+    val_edge_index = torch.tensor([val_df['userId'].values, val_df['productId'].values], dtype=torch.long)
+    val_edge_attr = torch.tensor(val_df['Rating'].values, dtype=torch.float)
+    # node matrix using all the data
     num_users = df['userId'].nunique()
     num_items = df['productId'].nunique()
     num_nodes = num_users + num_items
     node_features = torch.eye(num_nodes)
-    data = Data(edge_index=edge_index, edge_attr=edge_attr, x=node_features)
+    train_data = Data(edge_index=train_edge_index, edge_attr=train_edge_attr, x=node_features)
+    val_data = Data(edge_index=val_edge_index, edge_attr=val_edge_attr, x=node_features)
 
-    # partitioner = IidPartitioner(num_partitions)
-    # partitioner.dataset = data
-    # partition = partitioner.load_partition(partition_id)
+    trainloader = DataLoader([train_data], batch_size=1, shuffle=True)
+    valloader = DataLoader([val_data], batch_size=1, shuffle=False)
     
-    trainloader = DataLoader([data], batch_size=1, shuffle=True)
-    testloader = DataLoader([data], batch_size=1, shuffle=False)
-    
-    return trainloader, testloader
-
+    return trainloader, valloader
 # a, b = load_data(1, 3)
 
 
@@ -91,7 +91,7 @@ def train(net, trainloader, valloader, epochs, device):
         "val_loss": val_loss,
         "val_accuracy": val_acc,
     }
-    return results
+    return results, net
 
 
 def test(net, testloader):
