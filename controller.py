@@ -47,7 +47,7 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        consumer.close() # Clean shutdown of consumer to let other instances take over.
+        consumer.close() # Clean shutdown of consumer to let other instances of the controler to take over
 
 if __name__ == "__main__":
     main()
